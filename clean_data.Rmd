@@ -1,0 +1,54 @@
+---
+title: "clean_data"
+author: "SL"
+date: "2026-03-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+hoteldata_raw <- read.csv("hotel_booking.csv", stringsAsFactors = TRUE)
+hoteldata <- na.omit(hoteldata_raw)
+
+anyNA(hoteldata)
+
+
+hoteldata$name <- NULL
+hoteldata$email <- NULL
+hoteldata$credit_card <- NULL
+hoteldata$phone.number <- NULL
+hoteldata$agent <- NULL
+hoteldata$company <- NULL
+hoteldata$reservation_status <- NULL
+hoteldata$reservation_status_date <- NULL
+
+
+# Assuming your factor column is df$country
+tab <- sort(table(hoteldata$country), decreasing=TRUE)
+cumprop <- cumsum(tab / sum(tab))
+k <- min(which(cumprop >= 0.8))  # k=6 for your data (84.4%)
+
+# Recode: top k levels stay, rest → "Other"
+top_levels <- names(tab)[1:k]
+hoteldata$country <- factor(ifelse(hoteldata$country %in% top_levels, 
+                                      as.character(hoteldata$country), "Other"),
+                               levels=c(top_levels, "Other"))
+
+
+
+str(hoteldata)
+
+
+
+```
+
+```{r}
+anyNA(hoteldata)
+which(is.na(hoteldata))
+
+saveRDS(hoteldata, file = "hoteldata_og.rds")
+```
+

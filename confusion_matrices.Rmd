@@ -1,0 +1,39 @@
+---
+title: "confusion_matrices"
+output: html_document
+---
+
+# import data
+
+need to import data
+fix knn test variable for printing confusion matrix 
+
+```{r}
+test <- 
+
+
+knn_pred <- readRDS("knn.rds")
+
+
+```
+
+
+```{r}
+
+library(caret)
+
+
+knn_bin <- ifelse(knn_pred == "0", "no", "yes")
+knn_pred_clean <- factor(knn_bin, levels = c("no", "yes"))
+
+saveRDS(knn_pred_clean, "knn_pred.rds")
+
+
+y_true_char <- ifelse(test$y == 0, "no", "yes")
+y_true <- factor(y_true_char, levels = c("no", "yes"))
+
+
+confusionMatrix(knn_pred_clean, y_true, positive = "yes")
+
+```
+

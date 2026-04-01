@@ -1,0 +1,33 @@
+---
+title: "knn"
+output: html_document
+---
+
+```{r}
+train <- readRDS("train_dummy.rds")
+test <- readRDS("test_dummy.rds")
+```
+
+# building the model 
+
+```{r}
+
+library(class)
+
+anyNA(train)
+
+
+knn_pred <- knn(train = train[,(-ncol(train)-1)],
+                  test = test[,(-ncol(test)-1)],
+                  cl = train[,(ncol(train)-1)],
+                  k = 18,
+                  prob = TRUE)
+
+knn_prob <- attr(knn_pred, "prob")
+
+saveRDS(knn_pred, file = "knn.rds")
+saveRDS(knn_prob, file = "knn_probability.rds")
+
+```
+
+

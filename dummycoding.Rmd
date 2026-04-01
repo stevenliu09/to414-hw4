@@ -1,0 +1,49 @@
+---
+title: "dummycoding"
+output: html_document
+---
+
+```{r}
+hoteldata <- readRDS("hoteldata_og.rds")
+```
+
+```{r}
+
+hotel_d <- as.data.frame(model.matrix(~ . -1, data = hoteldata))
+
+anyNA(hotel_d)
+str(hotel_d)
+
+library(janitor)
+
+hotel_d <- clean_names(hotel_d)
+
+saveRDS(hotel_d, file = "dummy_no_normalization.rds")
+
+```
+
+# unused normalization
+
+minmax <- function(x){
+  (x - min(x)) / (max(x) - min(x))
+}
+
+hotel_n_na <- as.data.frame(lapply(hotel_d, minmax))
+
+str(hotel_n_na)
+
+hotel_n <- na.omit(hotel_n_na)
+
+anyNA(hotel_n)
+str(hotel_n)
+
+
+
+saveRDS(hotel_n, file = "hotel_dummy.rds")
+
+str(hotel_n)
+
+anyNA(hotel_n)
+
+
+
