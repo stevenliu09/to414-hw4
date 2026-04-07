@@ -28,6 +28,8 @@ test_og <- hoteldata[-train_rows_og, ]
 str(train_og)
 str(test_og)
 
+anyNA(train_og)
+
 
 saveRDS(train_og, file = "train_og.rds")
 saveRDS(test_og, file = "test_og.rds")

@@ -1,0 +1,72 @@
+---
+title: "SVM"
+output: html_document
+---
+
+# import data
+
+```{r}
+train <- readRDS("train_og.rds")
+test <- readRDS("test_og.rds")
+```
+
+
+```{r, cache=TRUE}
+library(kernlab)
+
+# testing different kernels
+
+tanhdotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "tanhdot")
+polydotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "polydot")
+vanilladotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "vanilladot")
+aplacedotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "laplacedot")
+besseldotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "besseldot")
+anovadotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "anovadot")
+splinedotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "splinedot")
+rbfdotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "rbfdot")
+
+```
+
+# emergency backup
+
+```{r}
+saveRDS(tanhdotmodel, file = "tanhdotmodel.rds")
+saveRDS(polydotmodel, file = "polydotmodel.rds")
+saveRDS(vanilladotmodel, file = "vanilladotmodel.rds")
+saveRDS(aplacedotmodel, file = "aplacedotmodel.rds")
+saveRDS(besseldotmodel, file = "besseldotmodel.rds")
+saveRDS(anovadotmodel, file = "anovadotmodel.rds")
+saveRDS(splinedotmodel, file = "splinedotmodel.rds")
+saveRDS(rbfdotmodel, file = "rbfdotmodel.rds")
+```
+
+
+
+# prediction 
+
+```{r}
+tanh_pred <- predict(tanhdotmodel, test)
+poly_pred <- predict(polydotmodel, test)
+v_pred <- predict(vanilladotmodel, test)
+l_pred <- predict(aplacedotmodel, test)
+b_pred <- predict(besseldotmodel, test)
+a_pred <- predict(anovadotmodel, test)
+s_pred <- predict(splinedotmodel, test)
+rbf_pred  <- predict(rbfdotmodel, test)
+```
+
+# confusion matrices
+
+```{r}
+library(caret)
+confusionMatrix(as.factor(tanh_pred), as.factor(test$is_canceled), positive = "yes")
+confusionMatrix(as.factor(poly_pred), as.factor(test$is_canceled), positive = "yes")
+confusionMatrix(as.factor(v_pred), as.factor(test$is_canceled), positive = "yes")
+confusionMatrix(as.factor(l_pred), as.factor(test$is_canceled), positive = "yes")
+confusionMatrix(as.factor(b_pred), as.factor(test$is_canceled), positive = "yes")
+confusionMatrix(as.factor(a_pred), as.factor(test$is_canceled), positive = "yes")
+confusionMatrix(as.factor(s_pred), as.factor(test$is_canceled), positive = "yes")
+confusionMatrix(as.factor(rbf_pred), as.factor(test$is_canceled), positive = "yes")
+```
+
+

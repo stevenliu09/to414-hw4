@@ -11,7 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 hoteldata_raw <- read.csv("hotel_booking.csv", stringsAsFactors = TRUE)
-hoteldata <- na.omit(hoteldata_raw)
+
+hoteldata <- hoteldata_raw[sample(1:nrow(hoteldata_raw), 0.4*nrow(hoteldata_raw)), ]
+
+
+nrow(hoteldata)
 
 anyNA(hoteldata)
 
@@ -21,9 +25,14 @@ hoteldata$email <- NULL
 hoteldata$credit_card <- NULL
 hoteldata$phone.number <- NULL
 hoteldata$agent <- NULL
+hoteldata$market_segment <- NULL
 hoteldata$company <- NULL
 hoteldata$reservation_status <- NULL
 hoteldata$reservation_status_date <- NULL
+
+
+median_children <- median(hoteldata$children, na.rm = TRUE)
+hoteldata$children[is.na(hoteldata$children)] <- median_children
 
 
 # Assuming your factor column is df$country
@@ -37,11 +46,8 @@ hoteldata$country <- factor(ifelse(hoteldata$country %in% top_levels,
                                       as.character(hoteldata$country), "Other"),
                                levels=c(top_levels, "Other"))
 
-
-
 str(hoteldata)
-
-
+summary(hoteldata)
 
 ```
 
@@ -50,5 +56,7 @@ anyNA(hoteldata)
 which(is.na(hoteldata))
 
 saveRDS(hoteldata, file = "hoteldata_og.rds")
+
+summary(hoteldata)
 ```
 

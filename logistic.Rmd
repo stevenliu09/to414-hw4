@@ -1,0 +1,40 @@
+---
+title: "logistic"
+output: html_document
+---
+
+# import data 
+
+```{r}
+train <- readRDS("train_og.rds")
+test <- readRDS("test_og.rds")
+
+str(train)
+str(test)
+```
+
+
+```{r, warning=FALSE, cache=TRUE}
+linear_model = glm(is_canceled ~ ., data = train, family = binomial)
+stepmodel = step(linear_model, direction = "both", trace = 0)
+
+stepmodel
+
+saveRDS(stepmodel, file = "logistic.rds")
+```
+```{r}
+pred_class <- predict(stepmodel, test, type = "response")
+
+pred_class
+
+saveRDS(pred_class, file = "logistic_pred.rds")
+
+pred_factor <- ifelse(pred_class > 0.1, "1", "0")
+
+pred_factor
+
+library(caret)
+
+confusionMatrix(as.factor(pred_factor), as.factor(test$is_canceled), positive = "1")
+```
+
