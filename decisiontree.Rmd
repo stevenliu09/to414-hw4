@@ -7,6 +7,8 @@ output: html_document
 
 ```{r}
 train <- readRDS("hoteldata_og.rds")
+
+str(train)
 ```
 
 # model 
