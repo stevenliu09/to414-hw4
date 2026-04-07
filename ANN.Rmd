@@ -13,35 +13,21 @@ str(train)
 str(test)
 ```
 
-<<<<<<< HEAD
-# model 
-=======
-# modeling
->>>>>>> 9a78ef6a036fa73ed3cc5f3dc5f36e3be084f6f5
+
 
 ```{r, cache=TRUE}
 library(neuralnet)
 
 ann_model <- neuralnet(
   formula = is_canceled ~ .,
-<<<<<<< HEAD
-  data = tele_train,
-=======
   data = train,
->>>>>>> 9a78ef6a036fa73ed3cc5f3dc5f36e3be084f6f5
+
   hidden = c(5, 2),
   stepmax = 1e8,
   lifesign = "full")
-
-
-<<<<<<< HEAD
-#plot(ann_model)
-
-#saveRDS(ann_model, file = "tele_ann.rds")
-=======
 plot(ann_model)
 
 saveRDS(ann_model, file = "ann.rds")
->>>>>>> 9a78ef6a036fa73ed3cc5f3dc5f36e3be084f6f5
+
 ```
 
