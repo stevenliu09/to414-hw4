@@ -1,0 +1,16 @@
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: 
+      
+      
+aesthetize the model files 
+
+backlink: 
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" >
+[Back to MainReportHW3.html](MainReportHW3.html#overviewofmodels)
+</div>
+

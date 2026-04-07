@@ -1,0 +1,21 @@
+---
+title: "decisiontree"
+output: html_document
+---
+
+# import data
+
+```{r}
+train <- readRDS("hoteldata_og.rds")
+```
+
+# model 
+
+```{r, cache=TRUE}
+library(randomForest)
+
+dtmodel <- randomForest(is_canceled ~., data = train)
+
+plot(dtmodel)
+```
+
