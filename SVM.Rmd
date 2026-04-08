@@ -18,7 +18,7 @@ library(kernlab)
 
 tanhdotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "tanhdot")
 polydotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "polydot")
-vanilladotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "vanilladot")
+vanilladotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "vanilladot") 
 aplacedotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "laplacedot")
 besseldotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "besseldot")
 anovadotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "anovadot")

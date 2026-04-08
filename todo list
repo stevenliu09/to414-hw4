@@ -1,9 +1,9 @@
 output: 
   html_document:
-    theme: cerulean
+    theme: flatly
     toc: yes
-    toc_float:
-      collapsed: 
+    toc_float: 
+      collapsed: TRUE
       
       
 aesthetize the model files 

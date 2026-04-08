@@ -1,7 +1,17 @@
 ---
-title: "decisiontree"
-output: html_document
+title: "Decision Tree Model"
+output: 
+  html_document:
+    theme: flatly
+    toc: yes
+    toc_float: 
+      collapsed: TRUE
 ---
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" >
+[Back to MainReportHW4](MainReportHW4.html#dtmodel)
+</div>
+
 
 # import data
 
@@ -19,5 +29,10 @@ library(randomForest)
 dtmodel <- randomForest(is_canceled ~., data = train)
 
 plot(dtmodel)
+
+saveRDS(dtmodel, file = "decisiontree.rds")
 ```
 
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" >
+[Back to MainReportHW4](MainReportHW4.html#dtmodel)
+</div>
