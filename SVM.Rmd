@@ -8,6 +8,8 @@ output: html_document
 ```{r}
 train <- readRDS("train_og.rds")
 test <- readRDS("test_og.rds")
+
+str(train)
 ```
 
 
@@ -38,6 +40,19 @@ saveRDS(besseldotmodel, file = "besseldotmodel.rds")
 saveRDS(anovadotmodel, file = "anovadotmodel.rds")
 saveRDS(splinedotmodel, file = "splinedotmodel.rds")
 saveRDS(rbfdotmodel, file = "rbfdotmodel.rds")
+
+```
+
+```{r}
+tanhdotmodel <- readRDS("tanhdotmodel.rds")
+polydotmodel <- readRDS("polydotmodel.rds")
+vanilladotmodel <- readRDS("vanilladotmodel.rds")
+aplacedotmodel <- readRDS("aplacedotmodel.rds")
+besseldotmodel <- readRDS("besseldotmodel.rds")
+anovadotmodel <- readRDS("anovadotmodel.rds")
+splinedotmodel <- readRDS("splinedotmodel.rds")
+rbfdotmodel <- readRDS("rbfdotmodel.rds")
+
 ```
 
 
@@ -53,14 +68,13 @@ b_pred <- predict(besseldotmodel, test)
 a_pred <- predict(anovadotmodel, test)
 s_pred <- predict(splinedotmodel, test)
 rbf_pred  <- predict(rbfdotmodel, test)
-```
+
 
 # confusion matrices
 
-```{r}
 library(caret)
-confusionMatrix(as.factor(tanh_pred), as.factor(test$is_canceled), positive = "yes")
-confusionMatrix(as.factor(poly_pred), as.factor(test$is_canceled), positive = "yes")
+confusionMatrix(as.factor(tanh_pred), as.factor(test$is_canceled), positive = "1")
+confusionMatrix(as.factor(poly_pred), as.factor(test$is_canceled), positive = "1")
 confusionMatrix(as.factor(v_pred), as.factor(test$is_canceled), positive = "yes")
 confusionMatrix(as.factor(l_pred), as.factor(test$is_canceled), positive = "yes")
 confusionMatrix(as.factor(b_pred), as.factor(test$is_canceled), positive = "yes")
