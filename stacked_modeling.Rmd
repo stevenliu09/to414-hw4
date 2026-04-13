@@ -1,0 +1,62 @@
+---
+title: "stacked_modeling"
+author: "Steven Liu"
+date: "TO414 HW 4"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+
+---
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#kappastacked)
+</div>
+
+# import data
+
+```{r}
+train_stacked <- readRDS("train_stacked.rds")
+test_stacked <- readRDS("test_stacked.rds")
+```
+
+# cost matrix
+
+```{r}
+cost_matrix <- matrix(c(0, 1, 3, 0), nrow = 2)
+```
+
+# data modeling
+
+```{r, cache=TRUE}
+library(randomForest)
+
+rf_dt_model <- randomForest(y ~ ., data = train_stacked, cost = cost_matrix)
+
+plot(rf_dt_model)
+
+stacked_model_plot <- plot(rf_dt_model)
+
+
+saveRDS(rf_dt_model, file = "stacked_decisiontree.rds")
+saveRDS(stacked_model_plot, file = "stacked_model_plot.rds")
+```
+
+# confusion matrix
+
+```{r}
+library(caret)
+
+costpred <- predict(rf_dt_model, test_stacked)
+
+costpred <- ifelse(costpred > 0.5, 1, 0)
+
+confusionMatrix(as.factor(costpred), as.factor(test_stacked$y), positive = "1")
+```
+
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#kappastacked)
+</div>

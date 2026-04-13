@@ -1,7 +1,19 @@
 ---
 title: "ANN"
-output: html_document
+author: "Steven Liu"
+date: "TO414 HW 4"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
 ---
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#overviewofmodels)
+</div>
+
 
 # import data
 
@@ -13,7 +25,7 @@ str(train)
 str(test)
 ```
 
-
+# build model
 
 ```{r, cache=TRUE}
 library(neuralnet)
@@ -31,3 +43,7 @@ saveRDS(ann_model, file = "ann.rds")
 
 ```
 
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#overviewofmodels)
+</div>

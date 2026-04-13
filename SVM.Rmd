@@ -1,7 +1,18 @@
 ---
 title: "SVM"
-output: html_document
+author: "Steven Liu"
+date: "TO414 HW 4"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
 ---
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#overviewofmodels)
+</div>
 
 # import data
 
@@ -12,75 +23,68 @@ test <- readRDS("test_og.rds")
 str(train)
 ```
 
+# build models
 
 ```{r, cache=TRUE}
 library(kernlab)
 
 # testing different kernels
 
-tanhdotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "tanhdot")
-polydotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "polydot")
-vanilladotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "vanilladot") 
-aplacedotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "laplacedot")
-besseldotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "besseldot")
-anovadotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "anovadot")
-splinedotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "splinedot")
-rbfdotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "rbfdot")
+#tanhdotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "tanhdot")
+#polydotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "polydot")
+#vanilladotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "vanilladot") 
+#aplacedotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "laplacedot")
+#besseldotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "besseldot")
+#anovadotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "anovadot")
+#splinedotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "splinedot")
+#rbfdotmodel <- ksvm(is_canceled ~ ., data = train, kernel = "rbfdot")
 
 ```
 
 # emergency backup
 
 ```{r}
-saveRDS(tanhdotmodel, file = "tanhdotmodel.rds")
-saveRDS(polydotmodel, file = "polydotmodel.rds")
-saveRDS(vanilladotmodel, file = "vanilladotmodel.rds")
-saveRDS(aplacedotmodel, file = "aplacedotmodel.rds")
-saveRDS(besseldotmodel, file = "besseldotmodel.rds")
-saveRDS(anovadotmodel, file = "anovadotmodel.rds")
-saveRDS(splinedotmodel, file = "splinedotmodel.rds")
-saveRDS(rbfdotmodel, file = "rbfdotmodel.rds")
+#saveRDS(tanhdotmodel, file = "tanhdotmodel.rds")
+#saveRDS(polydotmodel, file = "polydotmodel.rds")
+#saveRDS(vanilladotmodel, file = "vanilladotmodel.rds")
+#saveRDS(aplacedotmodel, file = "aplacedotmodel.rds")
+#saveRDS(besseldotmodel, file = "besseldotmodel.rds")
+#saveRDS(anovadotmodel, file = "anovadotmodel.rds")
+#saveRDS(splinedotmodel, file = "splinedotmodel.rds")
+#saveRDS(rbfdotmodel, file = "rbfdotmodel.rds")
 
 ```
-
-```{r}
-tanhdotmodel <- readRDS("tanhdotmodel.rds")
-polydotmodel <- readRDS("polydotmodel.rds")
-vanilladotmodel <- readRDS("vanilladotmodel.rds")
-aplacedotmodel <- readRDS("aplacedotmodel.rds")
-besseldotmodel <- readRDS("besseldotmodel.rds")
-anovadotmodel <- readRDS("anovadotmodel.rds")
-splinedotmodel <- readRDS("splinedotmodel.rds")
-rbfdotmodel <- readRDS("rbfdotmodel.rds")
-
-```
-
-
 
 # prediction 
 
 ```{r}
-tanh_pred <- predict(tanhdotmodel, test)
-poly_pred <- predict(polydotmodel, test)
-v_pred <- predict(vanilladotmodel, test)
-l_pred <- predict(aplacedotmodel, test)
-b_pred <- predict(besseldotmodel, test)
-a_pred <- predict(anovadotmodel, test)
-s_pred <- predict(splinedotmodel, test)
-rbf_pred  <- predict(rbfdotmodel, test)
+#tanh_pred <- predict(tanhdotmodel, test)
+#poly_pred <- predict(polydotmodel, test)
+#v_pred <- predict(vanilladotmodel, test)
+#l_pred <- predict(aplacedotmodel, test)
+#b_pred <- predict(besseldotmodel, test)
+#a_pred <- predict(anovadotmodel, test)
+#s_pred <- predict(splinedotmodel, test)
+#rbf_pred  <- predict(rbfdotmodel, test)
 
 
-# confusion matrices
-
-library(caret)
-confusionMatrix(as.factor(tanh_pred), as.factor(test$is_canceled), positive = "1")
-confusionMatrix(as.factor(poly_pred), as.factor(test$is_canceled), positive = "1")
-confusionMatrix(as.factor(v_pred), as.factor(test$is_canceled), positive = "yes")
-confusionMatrix(as.factor(l_pred), as.factor(test$is_canceled), positive = "yes")
-confusionMatrix(as.factor(b_pred), as.factor(test$is_canceled), positive = "yes")
-confusionMatrix(as.factor(a_pred), as.factor(test$is_canceled), positive = "yes")
-confusionMatrix(as.factor(s_pred), as.factor(test$is_canceled), positive = "yes")
-confusionMatrix(as.factor(rbf_pred), as.factor(test$is_canceled), positive = "yes")
 ```
 
+```{r}
+#saveRDS(tanh_pred, file = "tanh_pred.rds")
+#saveRDS(poly_pred, file = "poly_pred.rds")
+#saveRDS(v_pred, file = "v_pred.rds")
+#saveRDS(l_pred, file = "l_pred.rds")
+#saveRDS(b_pred, file = "b_pred.rds")
+#saveRDS(a_pred, file = "a_pred.rds")
+#saveRDS(s_pred, file = "s_pred.rds")
+#saveRDS(rbf_pred, file = "rbf_pred.rds")
 
+```
+
+The full SVM breakdown will be in [prediction_confusion_matrices.html](prediction_confusion_matrices.html)
+I did run all the models. Feel free to check the folder for all the RDS of the files, I commented out the code for sake of knitting
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#overviewofmodels)
+</div>

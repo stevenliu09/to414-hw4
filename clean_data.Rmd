@@ -1,13 +1,26 @@
 ---
 title: "clean_data"
-author: "SL"
-date: "2026-03-30"
-output: html_document
+author: "Steven Liu"
+date: "TO414 HW 4"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
 ---
+
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#cleandata)
+</div>
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# clean data
 
 ```{r}
 hoteldata_raw <- read.csv("hotel_booking.csv", stringsAsFactors = TRUE)
@@ -51,6 +64,8 @@ summary(hoteldata)
 
 ```
 
+# check NA
+
 ```{r}
 anyNA(hoteldata)
 which(is.na(hoteldata))
@@ -60,3 +75,7 @@ saveRDS(hoteldata, file = "hoteldata_og.rds")
 summary(hoteldata)
 ```
 
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#cleandata)
+</div>

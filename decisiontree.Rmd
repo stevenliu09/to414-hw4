@@ -2,21 +2,21 @@
 title: "Decision Tree Model"
 output: 
   html_document:
-    theme: flatly
+    theme: cerulean
     toc: yes
     toc_float: 
       collapsed: TRUE
 ---
 
 <div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" >
-[Back to MainReportHW4](MainReportHW4.html#dtmodel)
+[Back to MainReportHW4](MainReportHW4.html#overviewofmodels)
 </div>
 
 
 # import data
 
 ```{r}
-train <- readRDS("hoteldata_og.rds")
+train <- readRDS("train_og.rds")
 
 str(train)
 ```
@@ -26,7 +26,7 @@ str(train)
 ```{r, cache=TRUE}
 library(randomForest)
 
-dtmodel <- randomForest(is_canceled ~., data = train)
+dtmodel <- randomForest(as.factor(train$is_canceled) ~., data = train, ntree = 100)
 
 plot(dtmodel)
 
@@ -34,5 +34,5 @@ saveRDS(dtmodel, file = "decisiontree.rds")
 ```
 
 <div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" >
-[Back to MainReportHW4](MainReportHW4.html#dtmodel)
+[Back to MainReportHW4](MainReportHW4.html#overviewofmodels)
 </div>

@@ -1,0 +1,50 @@
+---
+title: "correlations"
+output: html_document
+---
+
+[Back to MainReportHW3.html](MainReportHW4.html#correlations)
+
+# import data
+
+```{r}
+hoteldata <- readRDS("hoteldata_og.rds")
+```
+
+
+# correlation matrix
+
+```{r}
+library(dplyr)
+library(corrplot)
+
+# 1) Keep only numeric columns
+num_data <- hoteldata %>%
+  select(where(is.numeric))
+
+# 2) Correlation matrix
+cor_matrix <- cor(num_data, use = "pairwise.complete.obs")
+
+# 3) View it
+print(cor_matrix)
+
+# 4) Visualize it
+corrplot(cor_matrix,
+         method = "color",
+         type = "upper",
+         order = "hclust",
+         tl.cex = 0.7,
+         addCoef.col = "black",
+         number.cex = 0.6)
+```
+```{r}
+
+library(magick)
+
+img <- image_read("correlationplot.png")
+plot(img)
+
+```
+
+
+[Back to MainReportHW3.html](MainReportHW4.html#correlations)

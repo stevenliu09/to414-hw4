@@ -1,16 +1,31 @@
 ---
 title: "knn"
-output: html_document
+author: "Steven Liu"
+date: "TO414 HW 4"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
 ---
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#overviewofmodels)
+</div>
+
+# import data
 
 ```{r}
 train <- readRDS("train_dummy.rds")
 test <- readRDS("test_dummy.rds")
+
+str(train)
 ```
 
 # building the model 
 
-```{r}
+```{r, cache = TRUE}
 
 library(class)
 
@@ -20,7 +35,7 @@ anyNA(train)
 knn_pred <- knn(train = train[,(-ncol(train)-1)],
                   test = test[,(-ncol(test)-1)],
                   cl = train[,(ncol(train)-1)],
-                  k = 18,
+                  k = 9,
                   prob = TRUE)
 
 knn_prob <- attr(knn_pred, "prob")
@@ -30,4 +45,6 @@ saveRDS(knn_prob, file = "knn_probability.rds")
 
 ```
 
-
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#overviewofmodels)
+</div>

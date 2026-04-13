@@ -1,0 +1,79 @@
+---
+title: "model_combination"
+author: "Steven Liu"
+date: "TO414 HW 4"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#kappastacked)
+</div>
+
+# import data
+
+```{r}
+test <- readRDS("test_og.rds")
+
+
+logistic_pred <- readRDS("logistic_pred.rds")
+knn_pred <- readRDS("knn_probability.rds")
+svm_pred <- readRDS("v_pred.rds")
+ann_pred <- readRDS("ann_pred.rds")
+dt_pred <- readRDS("decisiontree_pred.rds")
+y <- test$is_canceled
+
+str(logistic_pred)
+str(knn_pred)
+str(svm_pred)
+str(ann_pred)
+str(dt_pred)
+```
+
+
+# create dataframe 
+
+
+```{r}
+stacked_df <- data.frame(
+  logistic = logistic_pred,
+  knn      = knn_pred,
+  svm      = svm_pred,
+  ann      = ann_pred,
+  dt       = dt_pred,
+  y        = test$is_canceled
+)
+
+
+
+str(stacked_df)
+```
+
+# train and test
+
+```{r}
+set.seed(12345)
+ratio <- 0.7
+
+train_rows_stacked <- sample(1:nrow(stacked_df), ratio*nrow(stacked_df))
+
+train_stacked <- stacked_df[train_rows_stacked, ]
+test_stacked <- stacked_df[-train_rows_stacked, ]
+```
+
+# export
+
+```{r}
+saveRDS(train_stacked, file = "train_stacked.rds")
+saveRDS(test_stacked, file = "test_stacked.rds")
+
+str(train_stacked)
+```
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#kappastacked)
+</div>
+

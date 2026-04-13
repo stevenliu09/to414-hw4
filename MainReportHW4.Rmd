@@ -1,0 +1,184 @@
+---
+output:
+  html_document:
+    css: ross-rmarkdown.css
+    toc: true
+    toc_float: false
+    includes:
+      before_body: ross-header.html
+---
+
+
+# Executive Summary
+Hotel 414's customer dataset reveals key indicators of customer cancellations. Being able to quickly identify booking cancellations is an important priority, as it leads to better revenue management practices.  
+
+We use data-forward methodologies to assess cancellation patterns, recommending a targeted approach to predict cancellations based on customer attributes. Our approach utilizes individual supervised and unsupervised algorithmic learning models that are combined into a stacked model. We demonstrate our work with each type of algorithm to propose the most effective strategy for identifying cancellations. 
+
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+**Hey there!** I’m a note block that will appear after every section in this report. I’ll contain important file references that the section was based on.
+
+If you see me in reference pages, you can always click on Back to [MainReportHW4.html](MainReportHW4.html) to pick up right where you left off!
+
+</div>
+
+
+## Background
+It's no surprise that the widespread adoption of flexible, no-penalty booking policies by online travel agencies--such as Kayak, AirBNB, Hotels.com-- has contributed to the sharp increase of hotel cancellations. In fact, a study by D-Edge Hospitality Solutions — which analyzed the performance of 680 properties in Europe between 2014 and 2018 — found that the average cancellation rate grew from 32.9% in 2014 to 39.6% in 2018 ([Hotel Management](https://www.hotelmanagement.net/tech/study-cancelation-rate-at-40-as-otas-push-free-change-policy)). Even worse, online booking agency Booking.com saw a cancellation rate at 50% in the same year. The estimated $2.1 billion cost for the industry underscores the relevance of modern data analytics in the hospitality field ([Prostay](https://www.prostay.com/blog/hotel-booking-statistics-2025-market-insights-and-trends/)). 
+
+Traditionally, hotels have relied on overbooking. Overbooking is based on the assumption that some customers who have booked rooms will not appear for check-in (no-shows), others will cancel or amend their bookings last minute, while others will prematurely end their stay due to illness, personal reasons, weather, or other causes. However, overbooking can be tricky to do correctly, especially as cancellation behavior has grown more complex and dynamic.
+
+###  A Cost-Sensitive Analytical Frame
+
+ To overcome limitations of static overbooking rules, we turn to stacked modeling. A stacked modeling approach--able to combine the insights of individual modeling behavior-- therefore presents opportunities for tailored marketing and cancellation policies based on the characteristics of each booking segment. In brief, an ensemble model is capable of capturing segment-specific risk profiles and combines well with a cost matrix to reflect the asymmetric financial consequences at stake.
+
+
+
+
+# Data Exploration
+We began by taking a deep dive into our data.
+
+In our summary, we see that roughly 37% of customers in our dataset have cancellations. Hotel 414 is doing well! Given our assumptions below: 
+
+- False-alarm cancellation = cost of $100 (retention strategies such as discounts) 
+- Missed cancellation = cost of $300 (missed profit from not filling the room)
+
+
+Next, we want to check whether there is a strong relationship between strokes and the other variables by looking at the correlation heatmap. 
+
+```{r, echo = FALSE}
+hoteldata <- readRDS("hoteldata_og.rds")
+
+library(dplyr)
+library(corrplot)
+
+# 1) Keep only numeric columns
+num_data <- hoteldata %>%
+  select(where(is.numeric))
+
+# 2) Correlation matrix
+cor_matrix <- cor(num_data, use = "pairwise.complete.obs")
+
+# 4) Visualize it
+corrplot(cor_matrix,
+         method = "color",
+         type = "upper",
+         order = "hclust",
+         tl.cex = 0.7,
+         addCoef.col = "black",
+         number.cex = 0.6)
+```
+
+There doesn't appear to be a ton of correlation between any single variables, although some time-related variables seem to relate together well. These may reflect certain seasons and weeks that hotel demand is particularly high. 
+
+
+# Data Cleaning
+We proceed to build supervised learning models with respect to predicting the cancellation rate. 
+
+We found the data to require additional cleaning. For instance, we removed personal identifiers (name, email, credit_card, etc.) since they would have no predictive value. To tidy up the "children" variable, we replaced the missing values with the median number of children. 
+
+The dataset also include the country of origin for each customer. While it showcased a rich array of nationalities, this would require lots of computing power to filter through all the individual countries. We therefore condense the bottom percentile of countries and kept it to the most frequently seen countries in the dataset. 
+
+Additionally, we also factorized all other variables into categorical variables to facilitate fair comparisons. We prepared the data-set for model training by reserving a portion of the data for training and another for verification. 
+
+
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" id="cleandata">
+[clean_data.html](clean_data.html) contains the cleaning of the dataset. Dummy coding occurs in [dummycoding.html](dummycoding.html)
+</div>
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" id="traintestsplit">
+[traintestsplit.html](traintestsplit.html) contains the splitting of the dataset. 
+</div>
+
+
+# Kappa Analysis
+
+Our approach first centered on prioritizing Kappa, an attribute of models that helps models achieve outcomes that are better than chance alone. For instance, a model that simply predicts "no cancel" for every booking would achieve high accuracy, but kappa would penalize that kind of naïve performance by comparing observed agreement against what chance alone would produce. 
+
+## Individual Models
+
+The individual models in this project span a range of complexity and intuition, from simple, interpretable methods to more flexible, data‑driven learners. Overall, the three “fundamental” models (KNN, SVM, and logistic regression) rely on relatively direct geometric or probabilistic structures, while the Artificial Neural Network (ANN) and decision tree introduce more complex, non‑linear decision boundaries that can capture richer patterns. 
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" id="overviewofmodels">
+List of models: 
+<ul>
+	<li>[Artificial Neural Network](ANN.html)</li>
+  <li>[Logistic Regression](logistic.html)</li>
+  <li>[Support Vector Machine](svm.html)</li>
+  <li>[K Nearest Neighbor](knn.html)</li>
+  <li>[Decision Tree](decisiontree.html)</li>
+</ul>
+
+</div>
+
+
+### Kappa Analysis: Individual Models
+
+Kappas from the individual models: 
+
+- Support Vector Machine (Vanilla):  0.3837
+- Logistic Regression: 0.4873
+- Decision tree: 0.7647
+- Artificial Neural Network: 0
+- K Nearest Neighbor: 0
+
+The individual models' kappas ranged from KNN's 0 to Decision Tree's 0.98. 
+
+KNN performed the worst. This isn't surprising since this dataset is quite skewed, with cancellations being a minority of the dataset. Even with smaller or larger K's the result was the same, sometimes even worse than random chance with the smaller K's. 
+
+ANN also performed very badly, even after adjusting the threshold. It didn't seem have found any pattern in the dataset, and instead just guessed. 
+
+Decision tree performed the best. It was able to capture nonlinear splits and feature interactions naturally, which distance-based KNN struggles with on mixed data types. Additionally, it was also able to automatically prioritize strong predictors like lead_time, deposit_type, or previous_cancellations through recursive splitting.
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" id="confusion" >
+Confusion matrices of each model are located in [prediction_confusion_matrices.html](prediction_confusion_matrices.html). 
+</div>
+
+
+
+
+
+## Stacked Model
+
+### Overview of Stacked Model Approach
+
+The stacked model belongs to the family of stacked generalization (ensemble techniques) where a super‑learner (here, a decision tree) learns to combine base‑learner predictions in a way that can outperform any single model, strengthened by incorporating a cost matrix. 
+
+In practice, each base model first generates a prediction vector on the test set, and then these predictions are coalesced into a single data frame along with the true response to create a new, smaller feature space for the second‑level model.  
+
+In addition to combining the predictions of the five base models, the stacked model incorporates a **cost matrix** into the second‑level decision tree. 
+
+In the hotel context, a missed cancellation (false negative) means the hotel turns away too many guests; a false positive means the hotel may apply unnecessary retention interventions to a guest who would have stayed anyway. 
+
+By assigning a penalty each misclassification, a cost matrix helps the decision tree optimize for a cost‑sensitive error tradeoff. 
+
+
+### Kappa Analysis: Stacked Model
+
+Kappa for the stacked model with cost matrix
+
+- Stacked model: 0.5412
+
+The stacked model did achieve a strong Kappa, but it did not exceed the performance of the decision tree. We hypothesize that the inclusion of low-performing models may have degraded the overall performance of the stacked model. Additionally, the logistic regression and decision tree could make similar errors, which would affect the performance of the model as well. 
+
+The cost matrix reflects the hypothetical costs mentioned near the beginning.  Adjusting it up and down didn't seem to make a difference. 
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;" id="kappastacked" >
+
+Stacked model dataframe occurs in [model_combination.html](model_combination.html). 
+
+RandomForest stacked model itself, including a confusion matrix, occurs in [stacked_modeling.html](stacked_modeling.html)
+</div>
+
+# Conclusion
+
+ The stacked model approach did not improve upon the strongest individual model. While their success rates did come very close to each other...
+
+- Decision Tree success rate: 80%
+- Stacked model success rate: 80%
+
+- Decision Tree cost: $423,000
+- Stacked model cost: $196,100
+
+In this case, the stacked model was more cost-efficient. Due to the cost matrix, it was able to hone in the higher cost item, the missed cancellations. By implementing this model, Hotel 414 is able to efficiently retain customers and more accurately predict cancellations.   

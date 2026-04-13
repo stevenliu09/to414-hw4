@@ -1,7 +1,18 @@
 ---
 title: "traintestsplit"
-output: html_document
+author: "Steven Liu"
+date: "TO414 HW 4"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
 ---
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#traintestsplit)
+</div>
 
 # import data
 
@@ -57,3 +68,7 @@ saveRDS(train_dummy, file = "train_dummy.rds")
 saveRDS(test_dummy, file = "test_dummy.rds")
 ```
 
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#traintestsplit)
+</div>

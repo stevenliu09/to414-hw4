@@ -1,7 +1,19 @@
 ---
 title: "logistic"
-output: html_document
+author: "Steven Liu"
+date: "TO414 HW 4"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
 ---
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#overviewofmodels)
+</div>
+
 
 # import data 
 
@@ -9,10 +21,11 @@ output: html_document
 train <- readRDS("train_og.rds")
 test <- readRDS("test_og.rds")
 
-str(train)
+str(train$assigned_room_type)
 str(test)
 ```
 
+# building model
 
 ```{r, warning=FALSE, cache=TRUE}
 linear_model = glm(is_canceled ~ ., data = train, family = binomial)
@@ -38,3 +51,6 @@ library(caret)
 confusionMatrix(as.factor(pred_factor), as.factor(test$is_canceled), positive = "1")
 ```
 
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#overviewofmodels)
+</div>

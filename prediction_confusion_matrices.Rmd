@@ -1,0 +1,172 @@
+---
+title: "prediction_confusion_matrices"
+author: "Steven Liu"
+date: "TO414 HW 4"
+output: 
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: true
+---
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#confusion)
+</div>
+
+# import data
+
+```{r}
+train <- readRDS("train_dummy.rds")
+train_no_dummy <- readRDS("train_og.rds")
+
+test_no_dummy <- readRDS("test_og.rds")
+test <- readRDS("test_dummy.rds")
+library(caret)
+
+library(kernlab)
+```
+# Support Vector Machine
+
+```{r, cache=TRUE}
+tanhdotmodel <- readRDS("tanhdotmodel.rds")
+polydotmodel <- readRDS("polydotmodel.rds")
+vanilladotmodel <- readRDS("vanilladotmodel.rds")
+besseldotmodel <- readRDS("besseldotmodel.rds")
+aplacedotmodel <- readRDS("aplacedotmodel.rds")
+anovadotmodel <- readRDS("anovadotmodel.rds")
+#splinedotmodel <- readRDS("splinedotmodel.rds")
+rbfdotmodel <- readRDS(file = "rbfdotmodel.rds")
+
+```
+
+```{r, cache=TRUE}
+tanh_pred <- readRDS("tanh_pred.rds")
+poly_pred <- readRDS("poly_pred.rds")
+vanilla_pred <- predict(vanilladotmodel, test_no_dummy)
+#bessel_pred <- predict(besseldotmodel, test_no_dummy)
+
+saveRDS(vanilla_pred, file = "v_pred.rds")
+#saveRDS(bessel_pred, file = "bessel_pred.rds")
+
+anova_pred <- readRDS("a_pred.rds")
+#splinedot_pred <- predict(splinedotmodel, test_no_dummy)
+rbf_pred <- readRDS("rbf_pred.rds")
+
+#splinedot was not done after an hour, so i did not include it. 
+#besse was hanging
+
+print("tanh")
+
+pred_class_tanh <- ifelse(tanh_pred[,1] >= 0.2, 1, 0)
+confusionMatrix(as.factor(pred_class_tanh), as.factor(test_no_dummy$is_canceled), positive = "1")
+
+print("poly")
+pred_class_poly <- ifelse(poly_pred[,1] >= 0.5, 1, 0)
+confusionMatrix(as.factor(pred_class_poly), as.factor(test_no_dummy$is_canceled), positive = "1")
+
+print("vanilla")
+pred_class_vanilla <- ifelse(vanilla_pred[,1] >= 0.5, 1, 0)
+confusionMatrix(as.factor(pred_class_vanilla), as.factor(test_no_dummy$is_canceled), positive = "1")
+
+
+
+#pred_class_bessel <- ifelse(bessel_pred[,1] >= 0.5, 1, 0)
+#confusionMatrix(as.factor(pred_class_bessel), as.factor(test_no_dummy$is_canceled), positive = "1")
+
+# bessel didn't perform well, so i didn't want to divert time away from other models
+
+print("anova")
+pred_class_anova <- ifelse(anova_pred[,1] >= 0.5, 1, 0)
+confusionMatrix(as.factor(pred_class_anova), as.factor(test_no_dummy$is_canceled), positive = "1")
+
+print("rbf")
+pred_class_r <- ifelse(rbf_pred[,1] >= 0.5, 1, 0)
+confusionMatrix(as.factor(pred_class_r), as.factor(test_no_dummy$is_canceled), positive = "1")
+
+
+```
+
+# Logistic Regression
+
+```{r, cache=TRUE}
+test_no_dummy$assigned_room_type <- droplevels(train_no_dummy$assigned_room_type)
+
+
+stepmodel <- readRDS("logistic.rds")
+
+pred_class <- predict(stepmodel, test_no_dummy, type = "response")
+saveRDS(pred_class, file = "logistic_pred.rds")
+
+pred_factor <- ifelse(pred_class > 0.5, 1, 0)
+
+confusionMatrix(as.factor(pred_factor), as.factor(test_no_dummy$is_canceled), positive = "1")
+
+```
+
+# Decision tree
+
+```{r, cache=TRUE}
+train <- readRDS("train_dummy.rds")
+train_no_dummy <- readRDS("train_og.rds")
+
+test_no_dummy <- readRDS("test_og.rds")
+test <- readRDS("test_dummy.rds")
+
+
+library(randomForest)
+
+dtmodel <- readRDS("decisiontree.rds")
+
+dt_pred  <- predict(dtmodel, test_no_dummy)
+saveRDS(dt_pred, file = "decisiontree_pred.rds")
+
+
+
+confusionMatrix(as.factor(dt_pred), as.factor(test_no_dummy$is_canceled), positive = "1")
+```
+
+# Artifical Neural Network
+
+```{r, cache=TRUE}
+library(neuralnet)
+
+ann_model <- readRDS("ANN.rds")
+ann_pred <- predict(ann_model, test)
+saveRDS(ann_pred, file = "ann_pred.rds")
+
+ann_bin_pred1 <- ifelse(ann_pred <= 0.5, 0, 1)
+ann_bin_char <- ifelse(ann_bin_pred1 == 0, "no", "yes")
+ann_bin_pred <- factor(ann_bin_char, levels = c("no", "yes"))
+
+y_true_char <- ifelse(test$is_canceled == 0, "no", "yes")
+y_true <- factor(y_true_char, levels = c("no", "yes"))
+
+confusionMatrix(ann_bin_pred, y_true, positive = "yes")
+```
+
+# KNN
+
+```{r, cache=TRUE}
+library(caret)
+
+knn_pred <- readRDS("knn.rds")
+
+knn_bin <- ifelse(knn_pred == "0", "no", "yes")
+knn_pred_clean <- factor(knn_bin, levels = c("no", "yes"))
+
+saveRDS(knn_pred_clean, "knn_pred.rds")
+
+
+y_true_char <- ifelse(test$is_canceled == 0, "no", "yes")
+y_true <- factor(y_true_char, levels = c("no", "yes"))
+
+
+confusionMatrix(knn_pred_clean, y_true, positive = "yes")
+```
+
+
+<div style="padding: 15px; background-color: #f9f9f9; border-left: 5px solid #ccc;">
+[Back to MainReportHW4.html](MainReportHW4.html#confusion)
+</div>
+
